@@ -24,7 +24,7 @@ function App() {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify()
+          body: JSON.stringify({ingr: ['1 tomato, 1 cup of rice']})
         });
     
     const data = await response.json();
