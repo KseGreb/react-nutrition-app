@@ -13,6 +13,10 @@ function App() {
   //creating state for nutrition information:
   const [ingrNutrients, setIngrNutrients] = useState();
 
+  //creating state for submitting a whole word, not only 1 letter for API search button:
+  const [wordSubmitted, setWordSubmitted] = useState("")
+
+
 
   const API_ID = "e6550d1b";
   const API_KEY = "4fe3203573bce172fbc3364a88b4293f";
@@ -20,40 +24,45 @@ function App() {
   //https://api.edamam.com/api/nutrition-details?app_id=e6550d1b&app_key=4fe3203573bce172fbc3364a88b4293f
 
 
+
+  const getNutrition = async (ingrLook) => {
+    const response = await fetch(`${API_URL}?app_id=${API_ID}&app_key=${API_KEY}`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ingr: ingrLook})
+      });
   
-  useEffect(()=>{
-    
-    const getNutrition = async () => {
-  
-      const response = await fetch(`${API_URL}?app_id=${API_ID}&app_key=${API_KEY}`, 
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({ingr: ['1 tomato, 1 cup of rice']})
-        });
-    
     const data = await response.json();
     setIngrNutrients(data);
     console.log(data)
   }
-    getNutrition();
-    
-  }, [])
+
+  
+  useEffect(()=>{
+    if (wordSubmitted !== ""){
+      let ingrLook = wordSubmitted.split("");
+      getNutrition(ingrLook);
+    }
+  }, [wordSubmitted])
 
   const myIngredientSearch = (e) => {
     setIngrSearch(e.target.value)
-    console.log(e.target.value)
   }
 
+const finalSearch = (e) => {
+  e.preventDefault();
+  setWordSubmitted(ingrSearch);
+}
 
 
   return (
     <div className="App">
       <div className='inputClass'>
-        <form>
+        <form onSubmit={finalSearch}>
           <input 
           className='search' 
           placeholder='Type your ingridients...' 
@@ -62,19 +71,20 @@ function App() {
         </form>
       </div>
       <div className='searchButton'>
-        <button className='btn'>Search</button>
+        <button onClick={finalSearch} className='btn'>Search</button>
       </div>
 
       <div>
       {
           ingrNutrients && <p>{ingrNutrients.calories} kcal</p>
         }
-      {ingrNutrients && Object.values(ingrNutrients.totalNutrients).map(({label, quantity, unit})=>
-      <Nutrients
-        label = {label}
-        quantity = {quantity}
-        unit = {unit}
-        />
+      {
+        ingrNutrients && Object.values(ingrNutrients.totalNutrients).map(({label, quantity, unit})=>
+          <Nutrients
+            label = {label}
+            quantity = {quantity}
+            unit = {unit}
+          />
       )}
       </div>
     </div>
