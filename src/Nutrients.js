@@ -1,7 +1,8 @@
-function Nutrients({label, quantity, unit}){
+
+function Nutrients({label, quantity, unit, index}){
     return(
-        <div>
-            <p>{label}: {quantity.toFixed()} {unit}</p>
+        <div key={index}>
+            <p> {label}: {quantity.toFixed()} {unit}</p>
         </div>
     )
 }

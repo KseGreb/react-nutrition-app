@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Nutrients from './Nutrients';
+import Swal from 'sweetalert2';
+import { Loader } from './Loader';
 
 
 
@@ -16,6 +18,8 @@ function App() {
   //creating state for submitting a whole word, not only 1 letter for API search button:
   const [wordSubmitted, setWordSubmitted] = useState("")
 
+  //Loader
+  const [loader, setLoader] = useState(false);
 
 
   const API_ID = "e6550d1b";
@@ -26,6 +30,9 @@ function App() {
 
 
   const getNutrition = async (ingrLook) => {
+    setLoader(true);
+    
+
     const response = await fetch(`${API_URL}?app_id=${API_ID}&app_key=${API_KEY}`, 
       {
         method: 'POST',
@@ -36,21 +43,32 @@ function App() {
         body: JSON.stringify({ingr: ingrLook})
       });
   
-    const data = await response.json();
-    setIngrNutrients(data);
-    console.log(data)
+    if(response.ok){
+      setLoader(false);
+      const data = await response.json();
+      setIngrNutrients(data);
+    }
+    else{
+      setLoader(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong! Try entering your indredients again!',
+      }) 
+    }
+    
   }
 
   
   useEffect(()=>{
     if (wordSubmitted !== ""){
-      let ingrLook = wordSubmitted.split("");
+      let ingrLook = wordSubmitted.split(",");
       getNutrition(ingrLook);
     }
   }, [wordSubmitted])
 
   const myIngredientSearch = (e) => {
-    setIngrSearch(e.target.value)
+    setIngrSearch(e.target.value);
   }
 
 const finalSearch = (e) => {
@@ -58,29 +76,31 @@ const finalSearch = (e) => {
   setWordSubmitted(ingrSearch);
 }
 
-
   return (
     <div className="App">
+      {loader && <Loader/>}
       <div className='inputClass'>
         <form onSubmit={finalSearch}>
           <input 
           className='search' 
           placeholder='Type your ingridients...' 
           onChange={myIngredientSearch}
+          spellCheck="true"
+          type='text'
+          lang='en'
           value={ingrSearch}/>
+          <button className='btn'>Search</button>
         </form>
       </div>
-      <div className='searchButton'>
-        <button onClick={finalSearch} className='btn'>Search</button>
-      </div>
+
 
       <div>
       {
           ingrNutrients && <p>{ingrNutrients.calories} kcal</p>
         }
       {
-        ingrNutrients && Object.values(ingrNutrients.totalNutrients).map(({label, quantity, unit})=>
-          <Nutrients
+        ingrNutrients && Object.values(ingrNutrients.totalNutrients).map(({label, quantity, unit, index})=>
+          <Nutrients key={index}
             label = {label}
             quantity = {quantity}
             unit = {unit}
