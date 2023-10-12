@@ -79,5 +79,74 @@
 
   
 body{
-    background-color: blueviolet;
+    background-image: url(nutrition.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-color: rgb(226, 239, 239);
+}
+.App{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+.showingCalories{
+    background-color: rgb(251, 244, 244);
+    border: 2px black solid;
+    min-width: 70%;
+    color: black;
+    max-width: 80%;
+    padding: 20px;
+    font-size: 20px;
+}
+/* p{
+    text-decoration: underline;
+} */
+.label{
+    display: flex; 
+    /* flex-direction: column; */
+    text-align: left; 
+    font-weight: bold;
+    
+}
+.quantity{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+.underline{
+    height: 5px;
+    background-color:black;
+}
+input{
+    padding: 15px;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+button{
+    padding: 15px;
+    font-size: 25px;
+    margin-bottom: 10px;
+    background-color: rgb(251, 244, 244);
+}
+.instructions{
+    font-size: 25px;
+}
+
+@media all and (max-width: 800px){
+    input, button{
+        font-size: 12px;
+    }
+    .instructions, .showingCalories{
+        font-size: 15px;
+    }
+}
+@media all and (max-width: 300px){
+    input, button{
+        font-size: 10px;
+    }
+    .instructions, .showingCalories{
+        font-size: 12px;
+    }
 }
