@@ -62,7 +62,7 @@ function App() {
   
   useEffect(()=>{
     if (wordSubmitted !== ""){
-      let ingrLook = wordSubmitted.split(/[,,;,\n,\r]/);
+      let ingrLook = wordSubmitted.split(",");
       getNutrition(ingrLook);
     }
   }, [wordSubmitted])
