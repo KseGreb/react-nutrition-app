@@ -81,7 +81,9 @@ const finalSearch = (e) => {
     <div className="App">
       <p className='instructions'>Enter 1 item at a time, or whole ingredient list. 
       <br></br>
-        Please use comma (" , ") to seperate items.</p>
+        Please use comma (" , ") to seperate items.
+          <br></br>
+          Example: 1 chicken breast, 1 cup of rice, 5 eggs</p>
       <div className='inputClass'>
         <form onSubmit={finalSearch}>
           <input 
