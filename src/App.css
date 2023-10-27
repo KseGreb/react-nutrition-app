@@ -135,9 +135,14 @@ button{
 }
 
 @media all and (max-width: 800px){
-    input, button{
+    input{
         font-size: 12px;
     }
+    button{
+        font-size: 12px;
+        border: 1px solid black;
+        color: black;
+    }    
     .instructions, .showingCalories{
         font-size: 15px;
     }
